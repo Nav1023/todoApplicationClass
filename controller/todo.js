@@ -3,7 +3,7 @@ let todoList = [
     id:'1',
     taskName: 'Learn Nodejs',
     description: 'Pay attention in the classes to understand the things',
-    status: false,
+    completedStatus: false,
     deadline: '30/08/2021',
     priority: '1'
   },
@@ -11,7 +11,7 @@ let todoList = [
     id:'2',
     taskName: 'Learn Reactjs',
     description: 'Pay attention in the classes to understand the things',
-    status: false,
+    completedStatus: false,
     deadline: '30/08/2021',
     priority: '2'
   }
@@ -19,7 +19,6 @@ let todoList = [
 
 const todoController = {
   create: (req, res) => {
-    console.log('Hello from todo controller');
     const { body } = req;
     todoList.push(body);
     res.send({
@@ -49,7 +48,6 @@ const todoController = {
     }); 
   },
   delete:  (req, res) => {
-    console.log('Hello from todo update controller');
     const { body } = req;
     const { id } = req.params;
 
@@ -66,6 +64,34 @@ const todoController = {
   },
   fetchList: (req, res) => {
     res.send(todoList);
+  },
+  fetchTask: (req, res) => {
+    const { id } = req.params;
+    let matchedElement = {};
+    todoList.forEach(element => {
+      if(element.id == id){
+        matchedElement = element;
+      }
+    });
+    return res.send({
+      status: true,
+      data: matchedElement
+    });
+  },
+  changeStatus: (req, res) => {
+    const { body } = req;
+    const { id } = req.params;
+    
+    for(let i=0; i<todoList.length; i++){
+      if(todoList[i].id == id){
+        todoList[i].completedStatus = body.completedStatus;
+      }
+    }
+    res.send({
+      message: 'Marked the status successfully',
+      status: true,
+      todoList,
+    }); 
   }
 }
 
