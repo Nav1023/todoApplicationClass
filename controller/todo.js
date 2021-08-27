@@ -1,6 +1,6 @@
 let todoList = [
   {
-    id:'1',
+    id:'13311',
     taskName: 'Learn Nodejs',
     description: 'Pay attention in the classes to understand the things',
     completedStatus: false,
@@ -8,7 +8,7 @@ let todoList = [
     priority: '1'
   },
   {
-    id:'2',
+    id:'13122',
     taskName: 'Learn Reactjs',
     description: 'Pay attention in the classes to understand the things',
     completedStatus: false,
@@ -20,8 +20,14 @@ let todoList = [
 const todoController = {
   create: (req, res) => {
     const { body } = req;
-    todoList.push(body);
-    res.send({
+    const randomUniqueId = Math.floor(Math.random() * 1000000)
+    const newTask = {
+        id: randomUniqueId,
+        ...body
+    };
+
+    todoList.push(newTask);
+    res.status(200).send({
       message: 'Added successfully',
       status: true,
     });
