@@ -13,7 +13,22 @@ let todoList = [
     description: 'Pay attention in the classes to understand the things',
     completedStatus: false,
     deadline: '30/08/2021',
-    priority: '2'
+    priority: 2,
+    testing: true,
+    progress : [
+      1, 2, 3, 4
+    ],
+    progressReport: [
+      {
+        message: "finsished 1st assignment"
+      },
+      {
+        message: "finsished 2nd assignment"
+      },
+      {
+        message: "finsished 3rd assignment"
+      }
+    ]
   }
 ];
 
@@ -102,24 +117,3 @@ const todoController = {
 }
 
 module.exports = todoController;
-
-
-
-
-// old wherever you find 3 remove it
-// [1, 2, 3, 4, 3, 6]
-// new
-// [1, 2, 4, 6]
-
-// if (arr[i] == 3){
-//   arr[i] = 9;
-// // }
-// {
-//     id:'2',
-//     "taskName": "Learn Full Stack development",
-//     "description": "Pay attention in the classes to understand the things",
-//     "status": false,
-//     "deadline": "30/08/2021",
-//     "priority": 4,
-// }
-
