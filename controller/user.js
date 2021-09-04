@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const bcrypt = require('bcryptjs');
 
 const userController = {
   create: async (req, res) => {
@@ -21,6 +22,11 @@ const userController = {
         age,
         dob,
       })
+
+      //encrypt the password
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+
       const newUser = await user.save();
       
       res.status(200).send({
@@ -36,6 +42,48 @@ const userController = {
       })
     }
   },
+  login: async(req, res) => {
+    // Steps to login api
+    // 1. Get the email and password from request.
+    // 2. Validate the email and password ( whether it is empty/undefined/null)
+    // 3. Fetch the record from DB (database) that matches the email & password.
+    // 4. Condition to check whether the record exists or not.
+    // 5. Accordingly send the response to the client.
+    try{
+      const { email, password } = req.body;
+
+      if(!email || !password){
+        return res.status(400).send({
+          message: 'Email or password is not valid',
+          status: false
+        });
+      }
+
+      const existingUser = await User.findOne({email});
+
+      if(existingUser){
+        const isPasswordMatch = await bcrypt.compare(password, existingUser.password);
+        if(isPasswordMatch){
+          return res.status(200).send({
+            message: 'Login Successful',
+            status: true
+          });
+        }
+      } 
+      
+      return res.status(200).send({
+        message: 'Wrong Email or password',
+        status: true
+      });
+
+    } catch(e){
+      return res.status(400).send({
+        message: 'Something went wrong!! Please try again later',
+        status: false
+      });
+    }
+    
+  }
 }
 
 module.exports = userController;
