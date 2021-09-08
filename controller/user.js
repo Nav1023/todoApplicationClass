@@ -1,6 +1,8 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 
 const userController = {
   create: async (req, res) => {
@@ -65,9 +67,20 @@ const userController = {
       if(existingUser){
         const isPasswordMatch = await bcrypt.compare(password, existingUser.password);
         if(isPasswordMatch){
+          const payload = {
+            user: {
+              id: existingUser.id,
+              firstname: existingUser.firstname
+            }
+          };
+          const jwtToken = await jwt.sign(payload,
+            config.get('jwtSecret'),
+            {expiresIn: 360000});
+
           return res.status(200).send({
             message: 'Login Successful',
-            status: true
+            status: true,
+            token: jwtToken
           });
         }
       } 
@@ -94,13 +107,13 @@ const userController = {
     // 4. Condition to check whether the record exists or not.
     // 5. Accordingly send the response to the client.
     try{
-      const { userId, followUserId } = req.body;
+      const { followUserId } = req.body;
 
 
       // let userId = mongoose.Types.ObjectId(req.body.userId);
       // let followUserId = mongoose.Types.ObjectId(req.body.followUserId);
 
-      const existingUser = await User.findById(userId);
+      const existingUser = await User.findById(req.user.id);
 
       if(existingUser){
         const followUser = await User.findById(followUserId);

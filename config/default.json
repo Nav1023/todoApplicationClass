@@ -1,3 +1,4 @@
 {
-  "mongodbURI": "mongodb+srv://admin:admin123@devconnector.azscs.mongodb.net/todo?retryWrites=true&w=majority"
+  "mongodbURI": "mongodb+srv://admin:admin123@devconnector.azscs.mongodb.net/todo?retryWrites=true&w=majority",
+  "jwtSecret": "mytestingSecretToken"
 }
